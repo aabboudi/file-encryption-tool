@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "utils.h"
+#include "actions.h"
 
 int main(int argc, char *argv[]) {
   if (argc < 4) {
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
 
   // Validate arguments
   if (mode.empty()) {
-    std::cerr << "Error: No mode is specified. Use --encrypt or --decrypt to set the mode." << std::endl;
+    std::cerr << "Error: No mode specified. Use --encrypt or --decrypt to set the mode." << std::endl;
     return 1;
   }
 
@@ -58,15 +59,14 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  if (mode == "decrypt" && overwrite) {
-    std::cerr << "Error: The overwrite flag can only be used when encrypting." << std::endl;
+  if (mode == "decrypt" && key.empty()) {
+    std::cerr << "Error: No key specified. The key is required to decrypt the file." << std::endl;
     return 1;
   }
 
-  if (mode == "decrypt" && key.empty()) {
-    std::cerr << "Error: The key is required to decrypt the file." << std::endl;
-    return 1;
-  }
+  key = key.empty() ? generateRandomKey(10) : key;
+
+  xorFile(mode, filePath, key, overwrite);
 
   return 0;
 }
