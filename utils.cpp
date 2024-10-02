@@ -5,14 +5,15 @@
 #include "utils.h"
 
 void showHelp() {
-  std::cout << "Usage: .\\lock.exe -e|-d -f <file_path> -k [key]\n"
+  std::cout << "Usage: .\\lock -e|-d -f|-r <path> -k <key>\n"
             << "Options:\n"
-            << "  -e, --encrypt   Encrypt the file\n"
-            << "  -d, --decrypt   Decrypt the file\n"
-            << "  --file <file>   Specify the file path\n"
-            << "  -h, --help      Show this help message and exit\n"
-            << "  --key [key]     Specify the encryption/decryption key\n"
-            << "  --overwrite     Specify whether to overwrite original file. Defaults to false.\n";
+            << "  -e, --encrypt               Encrypt the file\n"
+            << "  -d, --decrypt               Decrypt the file\n"
+            << "  -f, --file <path>           Specify the file path\n"
+            << "  -h, --help                  Show this help message and exit\n"
+            << "  -k, --key <key>             Specify the encryption/decryption key\n"
+            << "  -r, --recursive <path>      Specify the directory path\n"
+            << "  -w, --overwrite             Specify whether to overwrite original file. Defaults to false.\n";
 }
 
 std::string generateRandomKey(size_t length) {

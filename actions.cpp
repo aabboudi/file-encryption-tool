@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <filesystem>
 #include "actions.h"
 
 void xorFile(const std::string &mode, const std::string &filePath, const std::string &key, bool overwrite) {
@@ -45,5 +46,20 @@ void xorFile(const std::string &mode, const std::string &filePath, const std::st
     std::cout << "File successfully " << mode << "ed. Copy saved to : " << tempFilePath << std::endl
               << "Secret key: " << key << std::endl
               << "Store it somewhere safe.";
+  }
+}
+
+void xorDirectory(const std::string &mode, const std::string &directoryPath, const std::string &key, bool overwrite) {
+  if (!std::filesystem::exists(directoryPath) || !std::filesystem::is_directory(directoryPath)) {
+    std::cerr << "Error: Invalid directory path: " << directoryPath << std::endl;
+    return;
+  }
+
+  for (const auto &subPath : std::filesystem::directory_iterator(directoryPath)) {
+    if (subPath.is_regular_file()) {
+      xorFile(mode, subPath.path().string(), key, overwrite);
+    } else if (std::filesystem::is_directory(subPath)) {
+      xorDirectory(mode, subPath.path().string(), key, overwrite);
+    }
   }
 }

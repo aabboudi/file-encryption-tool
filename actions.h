@@ -4,5 +4,6 @@
 #include <string>
 
 void xorFile(const std::string&, const std::string&, const std::string&, bool);
+void xorDirectory(const std::string&, const std::string&, const std::string&, bool);
 
 #endif
