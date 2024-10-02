@@ -5,16 +5,16 @@
 #include <cstdio>
 #include "actions.h"
 
-void encryptFile(const std::string &filePath, const std::string &key, bool overwrite) {
+void xorFile(const std::string &mode, const std::string &filePath, const std::string &key, bool overwrite) {
   std::ifstream file(filePath, std::ios::binary);
 
-  // Ensure file is not changed mid-encryption
+  // Ensure file is not changed mid-action
   if (!file.is_open()) {
-    std::cerr << "Error opening file for encryption." << std::endl;
+    std::cerr << "Error opening file for " << mode << "ion." << std::endl;
     return;
   }
 
-  // Load file and encrypt data
+  // Load file and scramble data
   std::vector<char> buffer((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
   size_t keyLength = key.size();
 
@@ -38,8 +38,12 @@ void encryptFile(const std::string &filePath, const std::string &key, bool overw
   if(overwrite) {
     std::remove(filePath.c_str());
     std::rename(tempFilePath.c_str(), filePath.c_str());
-    std::cout << "File successfully encrypted and saved to: " << filePath << std::endl;
+    std::cout << "File successfully " << mode << "ed and saved to: " << filePath << std::endl
+              << "Secret key: " << key << std::endl
+              << "Store it somewhere safe.";
   } else {
-    std::cout << "File successfully encrypted. Copy saved to : " << tempFilePath << std::endl;
+    std::cout << "File successfully " << mode << "ed. Copy saved to : " << tempFilePath << std::endl
+              << "Secret key: " << key << std::endl
+              << "Store it somewhere safe.";
   }
 }

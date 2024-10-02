@@ -3,6 +3,6 @@
 
 #include <string>
 
-void encryptFile(const std::string&, const std::string&, bool);
+void xorFile(const std::string&, const std::string&, const std::string&, bool);
 
 #endif
