@@ -50,7 +50,12 @@ int main(int argc, char *argv[]) {
         return 1;
       }
     } else if (arg == "-w" || arg == "--overwrite") {
-      overwrite = true;
+      if(confirmOverwrite()) {
+        overwrite = true;
+      } else {
+        std::cout << "Operation canceled." << std::endl;
+        return 0;
+      }
     } else if (arg == "-h" || arg == "--help") {
       showHelp();
       return 0;

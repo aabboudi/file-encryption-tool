@@ -5,5 +5,6 @@
 
 void showHelp();
 std::string generateRandomKey(size_t);
+bool confirmOverwrite();
 
 #endif

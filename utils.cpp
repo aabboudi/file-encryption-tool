@@ -27,3 +27,15 @@ std::string generateRandomKey(size_t length) {
 
   return key;
 }
+
+bool confirmOverwrite() {
+  std::string response;
+  std::cout << "Instructed to overwrite original file." << std::endl
+            << "Are you sure you want to proceed? [Y/N]: ";
+  std::cin >> response;
+
+  if (response == "y" || response == "Y") {
+    return true;
+  }
+  return false;
+}
