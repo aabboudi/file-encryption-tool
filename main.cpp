@@ -86,6 +86,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  preventSelfDestruction(argv[0], path);
+
   key = key.empty() ? generateRandomKey(10) : key;
 
   if (target) {

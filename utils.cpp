@@ -2,10 +2,13 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
 #include "utils.h"
 
 void showHelp() {
-  std::cout << "Usage: .\\lock -e|-d -f|-r <path> -k <key>\n"
+  std::cout << "\nUsage:\n"
+            << "Encryption: .\\lock -e -f|-r <path> [-w] [-k <key>]\n"
+            << "Decryption: .\\lock -d -f|-r <path> [-w] -k <key>\n"
             << "Options:\n"
             << "  -e, --encrypt               Encrypt the file\n"
             << "  -d, --decrypt               Decrypt the file\n"
@@ -38,4 +41,20 @@ bool confirmOverwrite() {
     return true;
   }
   return false;
+}
+
+void preventSelfDestruction(const std::string &execPath, const std::string &targetPath) {
+  try {
+    auto execPathAbsolute = std::filesystem::absolute(execPath);
+    auto targetPathAbsolute = std::filesystem::absolute(targetPath);
+
+    if (execPathAbsolute == targetPathAbsolute) {
+      std::cerr << "Error: Attempting to target the executable at " << execPathAbsolute << std::endl
+                << "This operation is blocked to prevent self destruction." << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  } catch (const std::filesystem::filesystem_error &error) {
+    std::cerr << "Filesystem error: " << error.what() << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
