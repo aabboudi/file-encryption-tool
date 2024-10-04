@@ -48,10 +48,20 @@ void preventSelfDestruction(const std::string &execPath, const std::string &targ
     auto execPathAbsolute = std::filesystem::absolute(execPath);
     auto targetPathAbsolute = std::filesystem::absolute(targetPath);
 
+    // Check if target is the executable
     if (execPathAbsolute == targetPathAbsolute) {
       std::cerr << "Error: Attempting to target the executable at " << execPathAbsolute << std::endl
                 << "This operation is blocked to prevent self destruction." << std::endl;
       exit(EXIT_FAILURE);
+    }
+
+    // Check if target contains the executable
+    for (const auto &file : std::filesystem::recursive_directory_iterator(targetPathAbsolute)) {
+      if (std::filesystem::absolute(file.path()) == execPathAbsolute) {
+        std::cerr << "Error: Attempting to target a directory containing the executable at " << execPathAbsolute << std::endl
+                  << "This operation is blocked to prevent self destruction." << std::endl;
+        exit(EXIT_FAILURE);
+      }
     }
   } catch (const std::filesystem::filesystem_error &error) {
     std::cerr << "Filesystem error: " << error.what() << std::endl;
