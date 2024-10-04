@@ -57,6 +57,10 @@ void xorDirectory(const std::string &mode, const std::string &directoryPath, con
 
   for (const auto &subPath : std::filesystem::directory_iterator(directoryPath)) {
     if (subPath.is_regular_file()) {
+      if (subPath.path().extension() == ".exe") {
+        std::cerr << "Skipping executable at " << subPath.path() << std::endl;
+        continue;
+      }
       xorFile(mode, subPath.path().string(), key, overwrite);
     } else if (std::filesystem::is_directory(subPath)) {
       xorDirectory(mode, subPath.path().string(), key, overwrite);
