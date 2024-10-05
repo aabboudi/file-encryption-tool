@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <filesystem>
 #include "actions.h"
+#include "safeguard.h"
 
 void xorFile(const std::string &mode, const std::string &filePath, const std::string &key, bool overwrite) {
   std::ifstream file(filePath, std::ios::binary);
@@ -57,6 +58,11 @@ void xorFile(const std::string &mode, const std::string &filePath, const std::st
 void xorDirectory(const std::string &mode, const std::string &directoryPath, const std::string &key, bool overwrite) {
   if (!std::filesystem::exists(directoryPath) || !std::filesystem::is_directory(directoryPath)) {
     std::cerr << "Error: Invalid directory path: " << directoryPath << std::endl;
+    return;
+  }
+
+  if (isCriticalDir(directoryPath)) {
+    std::cerr << "Error: Target critical directory: " << directoryPath << std::endl;
     return;
   }
 
