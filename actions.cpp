@@ -15,6 +15,11 @@ void xorFile(const std::string &mode, const std::string &filePath, const std::st
     return;
   }
 
+  if (filePath.substr(filePath.find_last_of(".")) == ".exe") {
+    std::cerr << "Skipping executable at " << filePath << std::endl;
+    return;
+  }
+
   // Load file and scramble data
   std::vector<char> buffer((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
   size_t keyLength = key.size();
@@ -57,10 +62,6 @@ void xorDirectory(const std::string &mode, const std::string &directoryPath, con
 
   for (const auto &subPath : std::filesystem::directory_iterator(directoryPath)) {
     if (subPath.is_regular_file()) {
-      if (subPath.path().extension() == ".exe") {
-        std::cerr << "Skipping executable at " << subPath.path() << std::endl;
-        continue;
-      }
       xorFile(mode, subPath.path().string(), key, overwrite);
     } else if (std::filesystem::is_directory(subPath)) {
       xorDirectory(mode, subPath.path().string(), key, overwrite);
